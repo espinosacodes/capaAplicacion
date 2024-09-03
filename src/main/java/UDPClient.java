@@ -10,21 +10,38 @@ public class UDPClient {
         InetAddress.getByName("localhost");
         
         for (int i = 0; i < 10; i++) { 
-            
+
             byte[] sendData = "Hello, World!".getBytes();
 
             DatagramPacket sendPacket = 
             new DatagramPacket(
                 sendData, 
                 sendData.length, 
-                IPAddress, 
-                9876);
+                IPAddress, //la dirección IP del servidor
+                9876); //el puerto del servidor
 
             clientSocket.send(sendPacket);
+
+            //preparar recepcion de respuesta
+            byte[] receiveData = new byte[1024];
+            DatagramPacket receivePacket =
+                    new DatagramPacket(receiveData, receiveData.length);
+
+            //recibir respuesta del servidor
+            clientSocket.receive(receivePacket);
+            String answerString = new String(receivePacket.getData());
+            System.out.println("FROM SERVER: " + answerString);
+
+
         }
+
+
+        
 
         clientSocket.close();
 
     }
+
+    
     
 }

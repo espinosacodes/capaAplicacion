@@ -1,5 +1,9 @@
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+
+
 
 public class UDPServer {
     public static void main(String[] args) throws Exception {
@@ -19,5 +23,29 @@ public class UDPServer {
             System.out.println("RECEIVED: " + message);
         }
         
+        //para mandar al cliente hacen falta conocer la dirección IP y el puerto del cliente
+        
+        InetAddress ClientIPAddress = 
+                receivePacket.getAddress();
+
+        int port = receivePacket.getPort(); 
+        byte[] sendData = 
+        "Hello, im answering from the server!".getBytes();
+
+        // enviar respuesta al cliente
+
+        DatagramPacket sendPacket = 
+                new DatagramPacket(
+                        sendData, 
+                        sendData.length, 
+                        ClientIPAddress, 
+                        port);
+        
+        serverSocket.send(sendPacket);
+
+        
+
     }
+
+
 }
