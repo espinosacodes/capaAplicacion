@@ -9,7 +9,8 @@ public class UDPClient {
         InetAddress IPAddress = 
         InetAddress.getByName("localhost");
         
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) { 
+            
             byte[] sendData = "Hello, World!".getBytes();
 
             DatagramPacket sendPacket = 
