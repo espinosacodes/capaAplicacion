@@ -6,7 +6,7 @@ public class TCPClient {
 
     public static void main(String[] args) {
         String HOST = "localhost"; //127.0.0.1
-        int PUERTO  = 12345;
+        int PUERTO  = 6789;
         DataInputStream in; //del servidor al cliente
         DataOutputStream out; //del cliente al servidor
         try {
