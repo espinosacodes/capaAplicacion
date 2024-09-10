@@ -1,54 +1,29 @@
-
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
-
-//import UDPClient;
-
-
 
 public class UDPServer {
-    public static void main(String[] args) throws Exception {
-        DatagramSocket serverSocket = 
-                new DatagramSocket(9876);
 
-        byte[] receiveData = new byte[1024];
+    public static void main(String[] args) {
+        int PUERTO = 9876;
+        try {
+            DatagramSocket socket = new DatagramSocket(PUERTO);
+            byte[] receiveData = new byte[1024];
+            byte[] sendData;
 
-        boolean running = true;
-        while (running) {
-            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length); // Initialize the variable inside the loop
-        
-            serverSocket.receive(receivePacket);
-        
-            String message = new String(receivePacket.getData());
-            System.out.println("RECEIVED: " + message);
-            
-            //para mandar al cliente hacen falta conocer la dirección IP y el puerto del cliente
-            InetAddress ClientIPAddress = receivePacket.getAddress();
-            int port = receivePacket.getPort(); 
-            byte[] sendData = "Hello, im answering from the server!".getBytes();
-            
-            // enviar respuesta al cliente
-            DatagramPacket sendPacket = new DatagramPacket(
-                    sendData, 
-                    sendData.length, 
-                    ClientIPAddress, 
-                    port);
-            
-            serverSocket.send(sendPacket);
+            System.out.println("UDP Server is running...");
+            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+            socket.receive(receivePacket);
+            String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
+            System.out.println("Client: " + message);
 
-            // Add a condition to break the loop if needed
-            if (message.trim().equals("exit")) {
-                running = false;
-            }
+            String response = "Hello CLIENT, greeting from the SERVER";
+            sendData = response.getBytes();
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, receivePacket.getAddress(), receivePacket.getPort());
+            socket.send(sendPacket);
+
+            socket.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-
-        serverSocket.close();
-  
-
-}
-
-  
-
-
+    }
 }

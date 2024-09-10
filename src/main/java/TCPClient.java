@@ -5,25 +5,20 @@ import java.net.Socket;
 public class TCPClient {
 
     public static void main(String[] args) {
-        String HOST = "localhost"; //127.0.0.1
-        int PUERTO  = 6789;
-        DataInputStream in; //del servidor al cliente
-        DataOutputStream out; //del cliente al servidor
+        String HOST = "localhost";
+        int PUERTO = 6789;
         try {
-            Socket sc = new Socket(HOST, PUERTO);    
-            in = new DataInputStream(sc.getInputStream());
-            out = new DataOutputStream(sc.getOutputStream());
-            
-            out.writeUTF("Hola SERVIDOR, saludo desde el CLIENTE");
-            String msj = in.readUTF();
-            System.out.println(msj);
+            Socket socket = new Socket(HOST, PUERTO);
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
-            sc.close();
+            out.writeUTF("Hello SERVER, greeting from the CLIENT");
+            String message = in.readUTF();
+            System.out.println("Server: " + message);
 
+            socket.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
     }
-    
 }

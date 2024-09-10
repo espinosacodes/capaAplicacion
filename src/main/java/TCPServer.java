@@ -1,33 +1,27 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class TCPServer {
-    public static void main(String[] args)  throws IOException {
-        ServerSocket serverSocket = new ServerSocket(6789);
-        Socket sc = null; //para aceptar al cliente
-        System.out.println("Servidor iniciado.. ");
-        PrintWriter out;
-        BufferedReader in; 
-        while(true){
-                System.out.println("Esperando conexión...");
-                sc = serverSocket.accept();
-        
-                out = new PrintWriter(sc.getOutputStream(), true);
-                in = new BufferedReader(new InputStreamReader(sc.getInputStream()));
 
-                String mensajeCliente = in.readLine();
-                System.out.println("Mensaje recibido del cliente: " + mensajeCliente);
+    public static void main(String[] args) {
+        int PUERTO = 6789;
+        try {
+            ServerSocket serverSocket = new ServerSocket(PUERTO);
+            System.out.println("TCP Server is running...");
+            Socket socket = serverSocket.accept();
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
-                out.println(" Mensaje modificado: " + mensajeCliente.toUpperCase());
+            String message = in.readUTF();
+            System.out.println("Client: " + message);
+            out.writeUTF("Hello CLIENT, greeting from the SERVER");
 
-                sc.close();
+            socket.close();
+            serverSocket.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-
-        //serverSocket.close();
-
     }
 }
